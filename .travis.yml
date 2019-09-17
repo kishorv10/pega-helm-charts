@@ -50,7 +50,7 @@ deploy:
     - pega-aws-eks-example.tar.gz
     - pega-google-gke-example.tar.gz
     - pega-pivotal-pks-example.tar.gz
-  skip_cleanup: true
+  skip_cleanup: false
   on:
     repo: kishorv10/pega-helm-charts
     tags: true
