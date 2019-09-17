@@ -51,5 +51,5 @@ deploy:
     - pega-pivotal-pks-example.tar.gz
   skip_cleanup: true
   on:
-    repo: pegasystems/pega-helm-charts
+    repo: kishorv10/pega-helm-charts
     tags: true
