@@ -19,7 +19,7 @@ node {
     sh "chmod 777 jfrog"
     sh "ls -l"
     withCredentials([usernamePassword(credentialsId: 'artifactory', passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USER')]){
-      sh "jfrog --help"
+      sh "./jfrog --help"
     }
   }
 
