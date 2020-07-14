@@ -12,7 +12,7 @@ node {
     branchName = "${scmVars.GIT_BRANCH}"
     currentBuild.displayName = "${branchName}-${env.BUILD_NUMBER}"
     packageName = currentBuild.displayName
-     helm package --save=false ${packageName}
+     sh "helm --help"
           //  ls -l ${packageName}.tgz
           //  MD5SUM=\$(md5sum ${PROJ}-${PackageVersion}.tgz | awk '{print \$1}')
           //  SHA1SUM=\$(sha1sum ${PROJ}-${PackageVersion}.tgz | awk '{print \$1}')
