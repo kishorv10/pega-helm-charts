@@ -11,7 +11,7 @@ node {
     currentBuild.displayName = "${branchName}-${env.BUILD_NUMBER}"
     packageName = currentBuild.displayName
     sh "ls -l"
-    withCredentials([usernamePassword(credentialsId: 'artifactory2', passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USER')]){
+    withCredentials([usernamePassword(credentialsId: 'artifactory', passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USER')]){
 
     }
     sh "helm package --version 1.0 ./charts/pega/"
