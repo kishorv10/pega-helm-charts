@@ -2,7 +2,7 @@
 def cloudDockerRegistryCredentialsId = '24cb9b3a-f0c3-4e12-b5dc-bfeead404fba'
 
 node {
- stage ("Checkout and Build Images") {
+ stage ("Checkout and Package Charts") {
     sh "curl -fsSL -o helm-v3.2.4-linux-amd64.tar.gz https://get.helm.sh/helm-v3.2.4-linux-amd64.tar.gz"
     sh "tar -zxvf helm-v3.2.4-linux-amd64.tar.gz"
     sh "mv linux-amd64/helm /usr/local/bin/helm"
@@ -15,6 +15,7 @@ node {
 
     }
     sh "cd charts/pega/"
+    sh "ls -l"
     sh "helm dep update"
     sh "helm package --version 1.0 ./charts/pega/"
     sh "ls -l"
