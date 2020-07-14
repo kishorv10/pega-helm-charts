@@ -27,7 +27,7 @@ node {
           //    curl -v -XPOST --user ${env.USERNAME}:${env.PASSWORD} \
           //      https://${ArtifactoryHostname}/api/helm/helm-local/reindex
   }
- }
+
  stage("Trigger Orchestrator") {
   jobMap = [:]
   jobMap["job"] = "../kubernetes-test-orchestrator/master"
