@@ -16,6 +16,7 @@ node {
     //sh "git clone https://github.com/jfrog/jfrog-cli"
     //def url = "https://api.bintray.com/content/jfrog/jfrog-cli-go/"+"$"+"latest"+"jfrog-cli-linux-386/jfrog?bt_package=jfrog-cli-linux-386"
     sh "curl -fsSL -o jfrog https://api.bintray.com/content/jfrog/jfrog-cli-go/1.38.0/jfrog-cli-linux-386/jfrog?bt_package=jfrog-cli-linux-386"
+    sh "chmod 777 jfrog"
     sh "ls -l"
     withCredentials([usernamePassword(credentialsId: 'artifactory', passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USER')]){
       sh "jfrog --help"
