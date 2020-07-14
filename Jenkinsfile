@@ -10,27 +10,13 @@ node {
     branchName = "${scmVars.GIT_BRANCH}"
     currentBuild.displayName = "${branchName}-${env.BUILD_NUMBER}"
     packageName = currentBuild.displayName
-    sh "ls -l"
-    withCredentials([usernamePassword(credentialsId: 'artifactory', passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USER')]){
-
-    }
     sh "helm dependency update ./charts/pega/"
     sh "helm package --version 1.0 ./charts/pega/"
+    sh "curl -fsSL -o jfrog https://api.bintray.com/content/jfrog/jfrog-cli-go/$latest/jfrog-cli-linux-386/jfrog?bt_package=jfrog-cli-linux-386"
     sh "ls -l"
-     sh "helm --help"
-          //  ls -l ${packageName}.tgz
-          //  MD5SUM=\$(md5sum ${PROJ}-${PackageVersion}.tgz | awk '{print \$1}')
-          //  SHA1SUM=\$(sha1sum ${PROJ}-${PackageVersion}.tgz | awk '{print \$1}')
-          //  SHA256SUM=\$(sha256sum ${PROJ}-${PackageVersion}.tgz | awk '{print \$1}')
-          //    curl -XPUT --user ${env.USERNAME}:${env.PASSWORD} \
-          //      --upload-file ${PROJ}-${PackageVersion}.tgz \
-          //      -H"X-Checksum-Sha256:\${SHA256SUM}" \
-          //      -H"X-Checksum-Sha1:\${SHA1SUM}" \
-          //      -H"X-Checksum-Md5:\${MD5SUM}" \
-          //      https://${ArtifactoryHostname}/helm/${PROJ}-${PackageVersion}.tgz
-          //    # Re-index helm repo
-          //    curl -v -XPOST --user ${env.USERNAME}:${env.PASSWORD} \
-          //      https://${ArtifactoryHostname}/api/helm/helm-local/reindex
+    withCredentials([usernamePassword(credentialsId: 'artifactory', passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USER')]){
+      sh "jfrog --help"
+    }
   }
 
  stage("Trigger Orchestrator") {
