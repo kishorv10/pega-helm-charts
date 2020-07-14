@@ -6,16 +6,16 @@ node {
     sh "curl -fsSL -o helm-v3.2.4-linux-amd64.tar.gz https://get.helm.sh/helm-v3.2.4-linux-amd64.tar.gz"
     sh "tar -zxvf helm-v3.2.4-linux-amd64.tar.gz"
     sh "mv linux-amd64/helm /usr/local/bin/helm"
-    sh "ls -l"
-    sh "helm init --client-only"
-    withCredentials([usernamePassword(credentialsId: 'artifactory2', passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USER')]){
-
-    }
-   
     def scmVars = checkout scm
     branchName = "${scmVars.GIT_BRANCH}"
     currentBuild.displayName = "${branchName}-${env.BUILD_NUMBER}"
     packageName = currentBuild.displayName
+    sh "ls -l"
+    withCredentials([usernamePassword(credentialsId: 'artifactory2', passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USER')]){
+
+    }
+    sh "helm package --version 1.0 ./charts/pega/"
+    sh "ls -l"
      sh "helm --help"
           //  ls -l ${packageName}.tgz
           //  MD5SUM=\$(md5sum ${PROJ}-${PackageVersion}.tgz | awk '{print \$1}')
