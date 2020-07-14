@@ -20,7 +20,7 @@ node {
     sh "ls -l"
     withCredentials([usernamePassword(credentialsId: 'artifactory', passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USER')]){
       sh "./jfrog --help"
-      sh "./jfrog rt u pega-1.0.tgz --url=${ARTIFACTORY_URL} --user=${ARTIFACTORY_USER} --password=${ARTIFACTORY_PASSWORD}"
+      sh "./jfrog rt u --spec=pega-1.0.tgz --url=${ARTIFACTORY_URL} --user=${ARTIFACTORY_USER} --password=${ARTIFACTORY_PASSWORD}"
     }
   }
 
