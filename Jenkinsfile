@@ -12,7 +12,6 @@ node {
     packageName = currentBuild.displayName
     sh "helm dependency update ./charts/pega/"
     sh "helm package --version 1.0 ./charts/pega/"
-    def latest = "$latest"
     sh 'curl -fsSL -o jfrog https://getcli.jfrog.io | sh'
     sh "ls -l"
     withCredentials([usernamePassword(credentialsId: 'artifactory', passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USER')]){
