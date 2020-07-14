@@ -4,9 +4,11 @@ def cloudDockerRegistryCredentialsId = '24cb9b3a-f0c3-4e12-b5dc-bfeead404fba'
 node {
  stage ("Checkout and Build Images") {
     sh "curl https://storage.googleapis.com/kubernetes-helm/helm-v3.2.4-linux-amd64.tar.gz"
-    sh "mv linux-amd64/helm /usr/local/bin/helm"
+    sh "env"
+    withCredentials([usernamePassword(credentialsId: 'artifactory', passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USER')]){
+        echo "***test***"
+    }
     sh "tar xzf helm-v3.2.4-linux-amd64.tar.gz"
-    sh "export PATH=`pwd`/linux-amd64/:$PATH"
     sh "helm init --client-only"
     def scmVars = checkout scm
     branchName = "${scmVars.GIT_BRANCH}"
