@@ -14,9 +14,7 @@ node {
     withCredentials([usernamePassword(credentialsId: 'artifactory', passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USER')]){
 
     }
-    sh "cd ./charts/pega/"
-    sh "ls -l"
-    sh "helm dep update"
+    sh "helm dependency update ./charts/pega/"
     sh "helm package --version 1.0 ./charts/pega/"
     sh "ls -l"
      sh "helm --help"
