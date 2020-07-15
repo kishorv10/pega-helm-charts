@@ -16,8 +16,8 @@ node("pc-2xlarge") {
     
      withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',
 								credentialsId: awsCredentialsId_PE,
-								accessKeyVariable: 'AWS_ACCESS_KEY_ID_PE',
-								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY_PE']
+								accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']
                         ]) {
                     sh "aws s3 ls"
                     sh "aws s3 cp pega-1.0.tgz s3://kubernetes-pipeline/helm/ "
