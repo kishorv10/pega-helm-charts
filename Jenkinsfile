@@ -19,7 +19,7 @@ node("pc-2xlarge") {
 								accessKeyVariable: 'AWS_ACCESS_KEY_ID_PE',
 								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY_PE']
                         ]) {
-                    
+                    sh "aws s3 ls"
                     sh "aws s3 cp pega-1.0.tgz s3://kubernetes-pipeline/helm/ "
 
 
