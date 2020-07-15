@@ -18,9 +18,9 @@ node {
     sh "curl -fsSL -o jfrog https://api.bintray.com/content/jfrog/jfrog-cli-go/1.38.0/jfrog-cli-linux-386/jfrog?bt_package=jfrog-cli-linux-386"
     sh "chmod 777 jfrog"
     sh "ls -l"
-    withCredentials([usernamePassword(credentialsId: "bin.pega.io",
+    withCredentials([usernamePassword(credentialsId: "scrumteamwhitewalkers",
     passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USER')]) {
-      sh './jfrog rt u pega-1.0.tgz  helm-virtual/ --url="https://bin.pega.io/artifactory/" --user=${ARTIFACTORY_USER} --password=${ARTIFACTORY_PASSWORD}'
+      sh './jfrog rt u pega-1.0.tgz  pega-helm-charts --url="https://dl.bintray.com/scrumteamwhitewalkers/whitewalkers-pega-charts" --user=${ARTIFACTORY_USER} --password=${ARTIFACTORY_PASSWORD}'
   }
   }
 
