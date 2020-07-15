@@ -3,6 +3,7 @@ def awsCredentialsId_PE = "CloudENG-Development"
 
 node("pc-2xlarge") {
  stage ("Checkout and Package Charts") {
+
     sh "curl -fsSL -o helm-v3.2.4-linux-amd64.tar.gz https://get.helm.sh/helm-v3.2.4-linux-amd64.tar.gz"
     sh "tar -zxvf helm-v3.2.4-linux-amd64.tar.gz"
     sh "mv linux-amd64/helm /usr/local/bin/helm"
@@ -11,30 +12,17 @@ node("pc-2xlarge") {
     currentBuild.displayName = "${branchName}-${env.BUILD_NUMBER}"
     packageName = currentBuild.displayName
     sh "helm dependency update ./charts/pega/"
-    sh "helm package --version 1.0 ./charts/pega/"
-    
-    
+    sh "helm package --version ${env.BUILD_NUMBER} ./charts/pega/"
      withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',
 								credentialsId: awsCredentialsId_PE,
 								accessKeyVariable: 'AWS_ACCESS_KEY_ID',
 								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']
                         ]) {
-                    sh "aws s3 ls"
-                    sh "aws s3 cp pega-1.0.tgz s3://kubernetes-pipeline/helm/ "
+
+                    sh "aws s3 cp pega-${env.BUILD_NUMBER}.tgz s3://kubernetes-pipeline/helm/ "
 
 
     }
-    //sh 'curl -fsSL -o jfrog https://getcli.jfrog.io | sh'
-    //sh "git clone https://github.com/jfrog/jfrog-cli"
-    //def url = "https://api.bintray.com/content/jfrog/jfrog-cli-go/"+"$"+"latest"+"jfrog-cli-linux-386/jfrog?bt_package=jfrog-cli-linux-386"
-    //sh "curl -fsSL -o jfrog https://api.bintray.com/content/jfrog/jfrog-cli-go/1.38.0/jfrog-cli-linux-386/jfrog?bt_package=jfrog-cli-linux-386"
-    //sh "chmod 777 jfrog"
-    //sh "ls -l"
-   // withCredentials([usernamePassword(credentialsId: "bin.pega.io",
-    //passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USER')]) {
-      //sh "./jfrog --help"
-      //sh "./jfrog rt u pega-1.0.tgz  github-helm/ --url=https://meshbincam.pega.com/artifactory/ --user=${ARTIFACTORY_USER} --password=${ARTIFACTORY_PASSWORD}"
-  //}
   }
 
  stage("Trigger Orchestrator") {
