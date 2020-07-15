@@ -20,8 +20,7 @@ node {
     sh "ls -l"
     withCredentials([usernamePassword(credentialsId: "bin.pega.io",
     passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USER')]) {
-      sh "./jfrog --help"
-      sh "./jfrog rt u pega-1.0.tgz  github-helm/ --url=https://meshbincam.pega.com/artifactory/ --user=${ARTIFACTORY_USER} --password=${ARTIFACTORY_PASSWORD}"
+      sh "./jfrog rt u pega-1.0.tgz  github-helm/ --url=bin.pega.io --user=${ARTIFACTORY_USER} --password=${ARTIFACTORY_PASSWORD}"
   }
   }
 
