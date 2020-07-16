@@ -25,7 +25,6 @@ node("pc-2xlarge") {
     sh "mv linux-amd64/helm /usr/local/bin/helm"
     def scmVars = checkout scm
     branchName = "${scmVars.GIT_BRANCH}"
-    currentBuild.displayName = "${branchName}-${env.BUILD_NUMBER}"
     packageName = currentBuild.displayName
     sh "helm dependency update ./charts/pega/"
     sh "helm package --version ${env.BUILD_NUMBER} ./charts/pega/"
