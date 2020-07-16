@@ -33,7 +33,8 @@ node("pc-2xlarge") {
 								accessKeyVariable: 'AWS_ACCESS_KEY_ID',
 								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']
                         ]) {
-      sh "aws s3 cp pega-${env.BUILD_NUMBER}.tgz s3://kubernetes-pipeline/helm/ "
+      chartName = "pega-${env.BUILD_NUMBER}.tgz"
+      sh "aws s3 cp ${chartName} s3://kubernetes-pipeline/helm/ "
     }
   }
 
@@ -42,7 +43,7 @@ node("pc-2xlarge") {
     jobMap["job"] = "../kubernetes-test-orchestrator/US-366319"
     jobMap["parameters"] = [
                             string(name: 'PROVIDERS', value: labels),
-                            string(name: 'WEB_IMAGE_NAME', value: chartName),
+                            string(name: 'HELM_CHART_NAME', value: chartName),
                         ]
     jobMap["propagate"] = true
     jobMap["quietPeriod"] = 0 
