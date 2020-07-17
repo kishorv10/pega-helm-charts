@@ -1,11 +1,13 @@
 #!/usr/bin/env groovy
 def awsCredentialsId_PE = "CloudENG-Development"
 def labels = ""
-def chartName = ""
+def pega_chartName = ""
+def addons_chartName = ""
 node("pc-2xlarge") {
 
   stage("Initialze"){
       if (env.CHANGE_ID) {
+        pullRequest.comment("Starting pipeline for PR validation -> ${env.BRANCH_NAME}")
         pullRequest.labels.each{
         echo "label: $it"
         validateProviderLabel(it)
@@ -26,15 +28,20 @@ node("pc-2xlarge") {
     def scmVars = checkout scm
     branchName = "${scmVars.GIT_BRANCH}"
     packageName = currentBuild.displayName
+    prNumber = "${env.BRANCH_NAME}".split("-")[1]
     sh "helm dependency update ./charts/pega/"
-    sh "helm package --version ${env.BUILD_NUMBER} ./charts/pega/"
+    sh "helm dependency update ./charts/addons/"
+    sh "helm package --version ${prNumber}.${env.BUILD_NUMBER} ./charts/pega/"
+    sh "helm package --version ${prNumber}.${env.BUILD_NUMBER} ./charts/addons/"
      withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',
 								credentialsId: awsCredentialsId_PE,
 								accessKeyVariable: 'AWS_ACCESS_KEY_ID',
 								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']
                         ]) {
-      chartName = "pega-${env.BUILD_NUMBER}.tgz"
-      sh "aws s3 cp ${chartName} s3://kubernetes-pipeline/helm/ "
+      pega_chartName = "pega-${prNumber}.${env.BUILD_NUMBER}.tgz"
+      addons_chartName = "addons-${prNumber}.${env.BUILD_NUMBER}.tgz"
+      sh "aws s3 cp ${pega_chartName} s3://kubernetes-pipeline/helm/"
+      sh "aws s3 cp ${addons_chartName} s3://kubernetes-pipeline/helm/"
     }
   }
 
