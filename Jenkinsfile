@@ -6,7 +6,6 @@ def addons_chartName = ""
 node("pc-2xlarge") {
 
   stage("Initialze"){
-      //Just A comment
       if (env.CHANGE_ID) {
         pullRequest.comment("Starting pipeline for PR validation -> ${env.BRANCH_NAME}")
         pullRequest.labels.each{
