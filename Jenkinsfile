@@ -50,7 +50,7 @@ node("pc-2xlarge") {
     jobMap["job"] = "../kubernetes-test-orchestrator/US-366319"
     jobMap["parameters"] = [
                             string(name: 'PROVIDERS', value: labels),
-                            string(name: 'HELM_CHART_NAME', value: chartName),
+                            string(name: 'HELM_CHART_NAME', value: pega_chartName+","+addons_chartName),
                         ]
     jobMap["propagate"] = true
     jobMap["quietPeriod"] = 0 
