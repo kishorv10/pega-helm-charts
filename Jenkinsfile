@@ -45,7 +45,7 @@ node("pc-2xlarge") {
       addons_chartName = "addons-${prNumber}.${env.BUILD_NUMBER}.tgz"
       sh "aws s3 cp ${pega_chartName} s3://kubernetes-pipeline/helm/"
       sh "aws s3 cp ${addons_chartName} s3://kubernetes-pipeline/helm/"
-      sh "helm repo add pega-bin https://bin.pega.io/artifactory/platformservices-helm-release-local/ --username=${ARTIFACTORY_USER} --password="ARTIFACTORY_PASSWORD""
+      sh "helm repo add pega-artifactory https://bin.pega.io/artifactory/helm-stable --username=${ARTIFACTORY_USER} --password="ARTIFACTORY_PASSWORD""
     }
    } 
   }
