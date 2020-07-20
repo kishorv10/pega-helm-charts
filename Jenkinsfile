@@ -37,13 +37,17 @@ node("pc-2xlarge") {
      withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',
 								credentialsId: awsCredentialsId_PE,
 								accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']
-                        ]) {
+								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+      withCredentials([usernamePassword(credentialsId: "bin.pega.io",
+                passwordVariable: 'ARTIFACTORY_PASSWORD', 
+                usernameVariable: 'ARTIFACTORY_USER')]) {
       pega_chartName = "pega-${prNumber}.${env.BUILD_NUMBER}.tgz"
       addons_chartName = "addons-${prNumber}.${env.BUILD_NUMBER}.tgz"
       sh "aws s3 cp ${pega_chartName} s3://kubernetes-pipeline/helm/"
       sh "aws s3 cp ${addons_chartName} s3://kubernetes-pipeline/helm/"
+      sh "helm repo add pega-bin https://bin.pega.io/artifactory/platformservices-helm-release-local/"
     }
+   } 
   }
 
  stage("Trigger Orchestrator") {
