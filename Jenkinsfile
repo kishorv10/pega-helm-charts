@@ -48,7 +48,7 @@ node("pc-2xlarge") {
       sh "export MD5SUM=\$(md5sum ${pega_chartName} | awk '{print \$1}')"
       sh "export SHA1SUM=\$(sha1sum ${pega_chartName} | awk '{print \$1}')"
       sh "export SHA256SUM=\$(sha256sum ${pega_chartName} | awk '{print \$1}')"
-      echo "SHA256SUM----${SHA256SUM}"
+      echo "SHA256SUM----${env.SHA256SUM}"
       sh "curl -XPUT --user ${ARTIFACTORY_USER}:${ARTIFACTORY_PASSWORD} \
                --upload-file ${pega_chartName} -H \"X-Checksum-Sha256:${env.SHA256SUM}\" -H \"X-Checksum-Sha1:${env.SHA1SUM}\" -H \"X-Checksum-Md5:${env.MD5SUM}\" \
                https://bin.pega.io/artifactory/helm-local/${pega_chartName}"
