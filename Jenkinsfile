@@ -38,7 +38,7 @@ node("pc-2xlarge") {
 								credentialsId: awsCredentialsId_PE,
 								accessKeyVariable: 'AWS_ACCESS_KEY_ID',
 								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-      withCredentials([usernamePassword(credentialsId: "artifactory",
+      withCredentials([usernamePassword(credentialsId: "bin.pega.io",
                 passwordVariable: 'ARTIFACTORY_PASSWORD', 
                 usernameVariable: 'ARTIFACTORY_USER')]) {
       pega_chartName = "pega-${prNumber}.${env.BUILD_NUMBER}.tgz"
