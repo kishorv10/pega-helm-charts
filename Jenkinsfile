@@ -49,8 +49,8 @@ node("pc-2xlarge") {
       sh "helm search repo pega-artifactory"
       sh "curl -fsSL -o jfrog https://api.bintray.com/content/jfrog/jfrog-cli-go/1.38.0/jfrog-cli-linux-386/jfrog?bt_package=jfrog-cli-linux-386"
       sh "chmod 777 jfrog"
-      sh "ls -l"
-      sh "./jfrog rt u pega-${prNumber}.${env.BUILD_NUMBER}.tgz helm-local --url=https://bin.pega.io/artifactory/ --user=${ARTIFACTORY_USER} --password=${ARTIFACTORY_PASSWORD}"
+      sh "export CI=true"
+      sh "./jfrog rt u pega-${prNumber}.${env.BUILD_NUMBER}.tgz helm-local --url=https://bin.pega.io/artifactory/helm-local/ --user=${ARTIFACTORY_USER} --password=${ARTIFACTORY_PASSWORD}"
     }
    } 
   }
