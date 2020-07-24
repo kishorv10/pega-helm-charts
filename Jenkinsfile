@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-def awsCredentialsId_PE = "CloudENG-Development"
+def awsCredentialsId_PE = "aws_researchusers"
 def labels = ""
 def pega_chartName = ""
 def addons_chartName = ""
@@ -38,36 +38,10 @@ node("pc-2xlarge") {
 								credentialsId: awsCredentialsId_PE,
 								accessKeyVariable: 'AWS_ACCESS_KEY_ID',
 								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-      withCredentials([usernamePassword(credentialsId: "bin.pega.io",
-                passwordVariable: 'ARTIFACTORY_PASSWORD', 
-                usernameVariable: 'ARTIFACTORY_USER')]) {
       pega_chartName = "pega-${prNumber}.${env.BUILD_NUMBER}.tgz"
       addons_chartName = "addons-${prNumber}.${env.BUILD_NUMBER}.tgz"
       sh "aws s3 cp ${pega_chartName} s3://kubernetes-pipeline/helm/"
       sh "aws s3 cp ${addons_chartName} s3://kubernetes-pipeline/helm/"
-      MD5SUM = sh (
-      script: "md5sum ${pega_chartName} | awk '{print \$1}'",
-      returnStdout: true
-      ).trim()
-      SHA1SUM = sh (
-      script: "sha1sum ${pega_chartName} | awk '{print \$1}'",
-      returnStdout: true
-      ).trim()
-      SHA256SUM = sh (
-      script: "sha256sum ${pega_chartName} | awk '{print \$1}'",
-      returnStdout: true
-      ).trim()
-      
-      sh "curl -XPUT --user ${ARTIFACTORY_USER}:${ARTIFACTORY_PASSWORD} \
-               --upload-file ${pega_chartName} -H \"X-Checksum-Sha256:${SHA256SUM}\" -H \"X-Checksum-Sha1:${SHA1SUM}\" -H \"X-Checksum-Md5:${MD5SUM}\" \
-               https://bin.pega.io/artifactory/platformservices-helm-release-local/${pega_chartName}"
-      // sh "helm repo add pega-artifactory https://bin.pega.io/artifactory/helm-stable/ --username=${ARTIFACTORY_USER} --password=${ARTIFACTORY_PASSWORD}"
-      // sh "helm search repo pega-artifactory"
-      // sh "curl -fsSL -o jfrog https://api.bintray.com/content/jfrog/jfrog-cli-go/1.38.0/jfrog-cli-linux-386/jfrog?bt_package=jfrog-cli-linux-386"
-      // sh "chmod 777 jfrog"
-      // sh "export CI=true"
-      // sh "./jfrog rt u pega-${prNumber}.${env.BUILD_NUMBER}.tgz helm-local --url=https://bin.pega.io/artifactory/helm-local/ --user=${ARTIFACTORY_USER} --password=${ARTIFACTORY_PASSWORD}"
-    }
    } 
   }
 
