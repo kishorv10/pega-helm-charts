@@ -40,8 +40,8 @@ node("pc-2xlarge") {
 								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
       pega_chartName = "pega-${prNumber}.${env.BUILD_NUMBER}.tgz"
       addons_chartName = "addons-${prNumber}.${env.BUILD_NUMBER}.tgz"
-      sh "aws s3 cp ${pega_chartName} s3://kubernetes-pipeline/helm/"
-      sh "aws s3 cp ${addons_chartName} s3://kubernetes-pipeline/helm/"
+      sh "aws s3 cp ${pega_chartName} s3://kubernetes-automation/helm/"
+      sh "aws s3 cp ${addons_chartName} s3://kubernetes-automation/helm/"
    } 
   }
 
