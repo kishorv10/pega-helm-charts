@@ -36,8 +36,8 @@ node("pc-2xlarge") {
     sh "helm package --version ${prNumber}.${env.BUILD_NUMBER} ./charts/pega/"
     sh "helm package --version ${prNumber}.${env.BUILD_NUMBER} ./charts/addons/"
     sh "helm repo index --merge index.yaml --url https://dl.bintray.com/pegasystems/helm-test-automation/ ."
-     withCredentials([credentialsId: bintrayautomation,
-								usernameVariable: 'BINTRAY_USERNAME', passwordVariable: 'BINTRAY_APIKEY']) {
+     withCredentials([usernamePassword(credentialsId: "bintrayautomation",
+      passwordVariable: 'BINTRAY_APIKEY', usernameVariable: 'BINTRAY_USERNAME')]) {
       pega_chartName = "pega-${prNumber}.${env.BUILD_NUMBER}.tgz"
       addons_chartName = "addons-${prNumber}.${env.BUILD_NUMBER}.tgz"
       sh "curl -T ${pega_chartName} -u${BINTRAY_USERNAME}:${BINTRAY_APIKEY} https://api.bintray.com/content/pegasystems/helm-test-automation/helm-test-automation/1.0.0/"
