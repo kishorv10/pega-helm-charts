@@ -41,9 +41,9 @@ node("pc-2xlarge") {
       passwordVariable: 'BINTRAY_APIKEY', usernameVariable: 'BINTRAY_USERNAME')]) {
       pega_chartName = "pega-${prNumber}.${env.BUILD_NUMBER}.tgz"
       addons_chartName = "addons-${prNumber}.${env.BUILD_NUMBER}.tgz"
-      sh "curl -T ${pega_chartName} -u${BINTRAY_USERNAME}:${BINTRAY_APIKEY} https://api.bintray.com/content/pegasystems/helm-test-automation/helm-test-automation/1.0.0/"
-      sh "curl -T ${addons_chartName} -u${BINTRAY_USERNAME}:${BINTRAY_APIKEY} https://api.bintray.com/content/pegasystems/helm-test-automation/helm-test-automation/1.0.0/"
-      sh "curl -T index.yaml -u${BINTRAY_USERNAME}:${BINTRAY_APIKEY} https://api.bintray.com/content/pegasystems/helm-test-automation/helm-test-automation/1.0.0/"
+      sh "curl -T ${pega_chartName} -u${BINTRAY_USERNAME}:${BINTRAY_APIKEY} https://api.bintray.com/content/pegasystems/helm-test-automation/helm-test-automation/1.0.0?override=1"
+      sh "curl -T ${addons_chartName} -u${BINTRAY_USERNAME}:${BINTRAY_APIKEY} https://api.bintray.com/content/pegasystems/helm-test-automation/helm-test-automation/1.0.0?override=1"
+      sh "curl -T index.yaml -u${BINTRAY_USERNAME}:${BINTRAY_APIKEY} https://api.bintray.com/content/pegasystems/helm-test-automation/helm-test-automation/1.0.0?override=1"
       sh "curl -X POST -u${BINTRAY_USERNAME}:${BINTRAY_APIKEY} https://api.bintray.com/content/pegasystems/helm-test-automation/helm-test-automation/1.0.0/publish"
    } 
   }
