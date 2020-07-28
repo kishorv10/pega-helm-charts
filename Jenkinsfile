@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-def awsCredentialsId_PE = "aws_researchusers"
+def bintrayautomation = "bintrayautomation"
 def labels = ""
 def pega_chartName = ""
 def addons_chartName = ""
@@ -32,21 +32,23 @@ node("pc-2xlarge") {
     prNumber = "${env.BRANCH_NAME}".split("-")[1]
     sh "helm dependency update ./charts/pega/"
     sh "helm dependency update ./charts/addons/"
+    sh "curl -o index.yaml https://dl.bintray.com/pegasystems/helm-test-automation/index.yaml"
     sh "helm package --version ${prNumber}.${env.BUILD_NUMBER} ./charts/pega/"
     sh "helm package --version ${prNumber}.${env.BUILD_NUMBER} ./charts/addons/"
-     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',
-								credentialsId: awsCredentialsId_PE,
-								accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+    sh "helm repo index --merge index.yaml --url https://dl.bintray.com/pegasystems/helm-test-automation/ ."
+     withCredentials([credentialsId: bintrayautomation,
+								usernameVariable: 'BINTRAY_USERNAME', passwordVariable: 'BINTRAY_APIKEY']) {
       pega_chartName = "pega-${prNumber}.${env.BUILD_NUMBER}.tgz"
       addons_chartName = "addons-${prNumber}.${env.BUILD_NUMBER}.tgz"
-      sh "aws s3 cp ${pega_chartName} s3://kubernetes-automation/helm/"
-      sh "aws s3 cp ${addons_chartName} s3://kubernetes-automation/helm/"
+      sh "curl -T ${pega_chartName} -u${BINTRAY_USERNAME}:${BINTRAY_APIKEY} https://api.bintray.com/content/pegasystems/helm-test-automation/helm-test-automation/1.0.0/"
+      sh "curl -T ${addons_chartName} -u${BINTRAY_USERNAME}:${BINTRAY_APIKEY} https://api.bintray.com/content/pegasystems/helm-test-automation/helm-test-automation/1.0.0/"
+      sh "curl -T index.yaml -u${BINTRAY_USERNAME}:${BINTRAY_APIKEY} https://api.bintray.com/content/pegasystems/helm-test-automation/helm-test-automation/1.0.0/"
+      sh "curl -X POST -u${BINTRAY_USERNAME}:${BINTRAY_APIKEY} https://api.bintray.com/content/pegasystems/helm-test-automation/helm-test-automation/1.0.0/publish"
    } 
   }
 
  stage("Trigger Orchestrator") {
-    jobMap = [:]
+    /*jobMap = [:]
     jobMap["job"] = "../kubernetes-test-orchestrator/US-366319"
     jobMap["parameters"] = [
                             string(name: 'PROVIDERS', value: labels),
@@ -55,7 +57,8 @@ node("pc-2xlarge") {
     jobMap["propagate"] = true
     jobMap["quietPeriod"] = 0 
     resultWrapper = build jobMap
-    currentBuild.result = resultWrapper.result
+    currentBuild.result = resultWrapper.result*/
+    echo "Into Trigger Orchestrator"
  } 
 
 }
