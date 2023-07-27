@@ -38,10 +38,10 @@ spec:
             name: {{ template "clusteringServiceEnvironmentConfig" }}
         resources:
           requests:
-            cpu: "{{ .Values.resources.requests.cpu }}"
+            cpu: "200m"
             memory: "{{ .Values.resources.requests.memory }}"
           limits:
-            cpu: "{{ .Values.resources.limits.cpu }}"
+            cpu: "500m"
             memory: "{{ .Values.resources.limits.memory }}"
         ports:
         - containerPort: 5701

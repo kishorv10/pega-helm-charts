@@ -393,14 +393,11 @@ true
     sources:
     - secret:
         name: {{ template "pegaCredentialsSecret" $ }}
-  {{ if ((.Values.global.jdbc).external_secret_name) }}
     - secret:
-        name: {{ .Values.global.jdbc.external_secret_name }}
-  {{- end }}
-  {{ if ((.Values.hazelcast).external_secret_name)}}
+        name: {{ template "dbSecretResolver" }}
     - secret:
-        name: {{ .Values.hazelcast.external_secret_name }}
-  {{- end }}
+        name: {{ template "hzSecretResolver" }}
+
   {{ if ((.Values.global.customArtifactory.authentication).external_secret_name) }}
     - secret:
         name: {{ .Values.global.customArtifactory.authentication.external_secret_name }}

@@ -48,7 +48,14 @@ spec:
 {{- if .root.Values.custom }}{{- if .root.Values.custom.volumes }}
 {{ toYaml .root.Values.custom.volumes | indent 6 }}          
 {{- end }}{{- end }}  
-{{- include "pegaCredentialVolumeTemplate" .root | indent 6 }}
+      - name: {{ template "pegaInstallerCredentialsVolume" }}
+        projected:
+          defaultMode: 420
+          sources:
+          - secret:
+              name: {{ template "dbSecretResolver" }}
+          - secret:
+              name: {{ template "hzSecretResolver" }}
       - name: {{ template "pegaVolumeInstall" }}
         configMap:
           # This name will be referred in the volume mounts kind.
@@ -96,7 +103,7 @@ spec:
         # The given mountpath is mapped to volume with the specified name.  The config map files are mounted here.
         - name: {{ template "pegaVolumeInstall" }}
           mountPath: "/opt/pega/config"
-        - name: {{ template "pegaVolumeCredentials" }}
+        - name: {{ template "pegaInstallerCredentialsVolume" }}
           mountPath: "/opt/pega/secrets"
 {{- if and .root.Values.distributionKitVolumeClaimName (not .root.Values.distributionKitURL) }}          
         - name: {{ template "pegaDistributionKitVolume" }}
