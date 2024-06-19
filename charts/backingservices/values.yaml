@@ -31,7 +31,7 @@ srs:
     # To avoid exposing Docker credentials, optionally create a separate Docker config secret.
     # Specify secret names as an array of comma-separated strings. For example: ["secret1", "secret2"]
     imagePullSecretNames: []
-    
+
     # Container security context
     # securityContext:
     #   runAsUser: 9999 # app
